@@ -88,6 +88,10 @@ class CrudBuilderMixin(LoginRequiredMixin, PermissionRequiredMixin):
         context['verbose_model_name_plural'] = model._meta.verbose_name_plural
         context['project_name'] = getattr(
             settings, 'PROJECT_NAME', 'CRUDBUILDER')
+        if self.custom_context:
+            custom_context = self.custom_context(self.request, context, **kwargs)
+            context.update(custom_context)
+
         return context
 
     @property
@@ -146,9 +150,9 @@ class BaseListViewMixin(CrudBuilderMixin):
 
     def get_context_data(self, **kwargs):
         context = super(BaseListViewMixin, self).get_context_data(**kwargs)
-        if self.custom_context:
-            custom_context = self.custom_context(self.request, context, **kwargs)
-            context.update(custom_context)
+        # if self.custom_context:
+        #     custom_context = self.custom_context(self.request, context, **kwargs)
+        #     context.update(custom_context)
         return context
 
 
